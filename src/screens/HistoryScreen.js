@@ -98,6 +98,25 @@ function HistoryScreen() {
     }
   };
 
+  const getTotalCount = () => {
+    const filteredTimestamps = filterTimestamps();
+    return filteredTimestamps.length;
+  };
+
+  const getTotalText = () => {
+    const total = getTotalCount();
+    switch (activeTab) {
+      case 0:
+        return `Bugün: ${total} adet`;
+      case 1:
+        return `Bu hafta: ${total} adet`;
+      case 2:
+        return `Bu ay: ${total} adet`;
+      default:
+        return '';
+    }
+  };
+
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleString('tr-TR', {
@@ -203,6 +222,18 @@ function HistoryScreen() {
             }}
           >
             {formatSelectedDate()}
+          </Typography>
+          <Typography 
+            variant="h6" 
+            sx={{ 
+              mt: 1, 
+              textAlign: 'center',
+              fontSize: { xs: '1rem', sm: '1.25rem' },
+              fontWeight: 'bold',
+              color: 'primary.main',
+            }}
+          >
+            {getTotalText()}
           </Typography>
         </Box>
 

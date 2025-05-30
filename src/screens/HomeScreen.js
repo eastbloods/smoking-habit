@@ -20,9 +20,24 @@ function HomeScreen() {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
-    const savedCount = localStorage.getItem('smokeCount');
-    if (savedCount) {
-      setCount(parseInt(savedCount));
+    // Bugünün tarihini al
+    const today = new Date().toDateString();
+    
+    // Son güncelleme tarihini kontrol et
+    const lastUpdateDate = localStorage.getItem('lastUpdateDate');
+    
+    // Eğer son güncelleme bugün değilse veya hiç güncelleme yoksa
+    if (lastUpdateDate !== today) {
+      // Sayacı sıfırla
+      setCount(0);
+      localStorage.setItem('smokeCount', '0');
+      localStorage.setItem('lastUpdateDate', today);
+    } else {
+      // Bugünün sayacını yükle
+      const savedCount = localStorage.getItem('smokeCount');
+      if (savedCount) {
+        setCount(parseInt(savedCount));
+      }
     }
   }, []);
 
@@ -30,6 +45,7 @@ function HomeScreen() {
     const newCount = count + 1;
     setCount(newCount);
     localStorage.setItem('smokeCount', newCount);
+    localStorage.setItem('lastUpdateDate', new Date().toDateString());
     
     // Save timestamp
     const timestamps = JSON.parse(localStorage.getItem('smokeTimestamps') || '[]');
@@ -42,6 +58,7 @@ function HomeScreen() {
       const newCount = count - 1;
       setCount(newCount);
       localStorage.setItem('smokeCount', newCount);
+      localStorage.setItem('lastUpdateDate', new Date().toDateString());
 
       // Remove last timestamp
       const timestamps = JSON.parse(localStorage.getItem('smokeTimestamps') || '[]');
